@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>V-Chat</title>
+    <style>
+        body {
+            background-image: radial-gradient(#25D366, #fff);
+            margin-left: 0;
+            height: 99vh;
+            overflow: hidden;
+        }
+
+        .t-bar {
+            position: fixed;
+            top: 0px;
+            width: 100%;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            background-color: #25D366;
+            justify-content: space-between;
+        }
+
+        .profile {
+            border-radius: 50%;
+            border: 2px solid black;
+            height: 50px;
+            width: 50px;
+            margin-left: 10px;
+        }
+
+        .i-bar {
+            display: flex;
+            align-items: center;
+        }
+
+        .arrow {
+            height: 35px;
+            width: 35px;
+            margin-left: 30px;
+            border-radius: 50%;
+        }
+
+        .name {
+            font-weight: bold;
+            font-family: sans-serif;
+            margin-left: 20px;
+            font-size: x-large;
+        }
+
+        .c-bar {
+            margin-right: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .voi-c {
+            height: 32px;
+            width: 32px;
+            margin-right: 20px;
+        }
+
+        .vid-c {
+            height: 50px;
+            width: 50px;
+        }
+
+        .t-dots {
+            font-weight: bold;
+            transform: rotateZ(90deg);
+            font-size: 40px;
+            margin-left: 15px;
+            cursor: pointer;
+            width: 40px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            border-radius: 25%;
+            padding-bottom: 18px;
+        }
+
+        .t-dots::selection {
+            background-color: transparent;
+        }
+
+        .om {
+            background-color: #fff;
+            margin-right: 10px;
+            height: 195px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            width: 150px;
+            flex-direction: column;
+            list-style: none;
+            margin-top: 100px;
+            z-index: -1;
+            display: none;
+            /* position: fixed; */
+            float: right;
+            border-top: 1px solid black;
+            border-left: 1px solid black;
+            border-right: 1px solid black;
+        }
+
+        li {
+            cursor: pointer;
+            border-bottom: 1px solid black;
+            /* border-top: 1px solid black; */
+            width: 100%;
+            text-align: center;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            margin-top: 0px;
+            vertical-align: middle;
+        }
+
+        li::selection {
+            background-color: transparent;
+        }
+
+        .m-bar {
+            margin-top: 80px;
+            margin-bottom: 125px;
+            /* background-color: #fff; */
+            display: flex;
+            align-items: center;
+            width: 100%;
+            position: absolute;
+            z-index: -2;
+            height: 456px;
+            overflow-y: auto;
+        }
+
+        ::-webkit-scrollbar {
+            appearance: none;
+        }
+
+        .messages {
+            margin: auto;
+            /* background-color: #000; */
+            height: auto;
+            width: 95%;
+            padding: 33px;
+        }
+
+        .msg {
+            margin: 5px 0px;
+            display: inline;
+            padding: 10px 10px;
+            border-radius: 3px;
+            max-width: 50%;
+            height: fit-content;
+            width: auto;
+            vertical-align: middle;
+            text-align: center;
+            font-size: larger;
+        }
+
+        .msg-left {
+            background-color: #fff;
+            float: left;
+            clear: both;
+        }
+
+        .msg-right {
+            background-color: #25D366;
+            float: right;
+            clear: both;
+        }
+
+        .b-bar {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            background-color: #aeaeae;
+        }
+
+        .form {
+            width: 100%;
+            /* background-color: #fff; */
+            display: flex;
+            justify-content: center;
+        }
+
+        .input-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            bottom: 0;
+            background-color: #fff;
+            width: 70%;
+            height: 50px;
+            border-radius: 30px;
+            margin-left: 10px;
+        }
+
+        input {
+            border: none;
+            font-size: large;
+            margin-left: 20px;
+            margin-right: 20px;
+            width: 100%;
+            border-radius: 30px;
+        }
+
+        input:focus {
+            outline: none;
+        }
+
+        .voice {
+            margin-left: 10px;
+            margin-right: 5px;
+            border: none;
+            border-radius: 50%;
+            height: 60px;
+            width: 60px;
+        }
+
+        .img1 {
+            height: 60px;
+            width: 60px;
+            border-radius: 50%;
+        }
+
+        .send {
+            margin-left: 10px;
+            margin-right: 25px;
+            border: none;
+            border-radius: 50%;
+            height: 60px;
+            width: 60px;
+            background-color: #25d369;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .img2 {
+            aspect-ratio: 2 / 1;
+            height: 32px;
+            border-radius: 50%;
+            margin-left: 7px;
+        }
+
+        #path {
+            fill: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="t-bar">
+        <div class="i-bar">
+            <!-- <img src="https://cdn-icons-png.flaticon.com/128/507/507257.png" alt="" class="arrow"> -->
+            <img src="./src/avatar.png" alt="" class="profile">
+            <span class="name">V Chat</span>
+        </div>
+        <div class="c-bar">
+            <img src="./src/phone-call-button.png" class="voi-c">
+            <img src="./src/zoom.png" class="vid-c">
+            <span class="t-dots" onclick="openOptionsMenu()">...</span>
+
+        </div>
+    </div>
+    <div class="om" id="om">
+        <li>Option 1</li>
+        <li>Option 2</li>
+        <li>Option 3</li>
+        <li onclick="clearChats()">Clear Chats</li>
+        <li>Leave Room</li>
+    </div>
+
+    <div class="m-bar">
+        <div class="messages" id="messages">
+        </div>
+    </div>
+
+    <div class="b-bar">
+        <div class="voice">
+            <img src="./src/voice.png" alt="" class="img1">
+        </div>
+        <div class="input-box">
+            <input type="text" placeholder="Message" id="message">
+        </div>
+        <button type="submit" class="send" id="send" onclick="sendMessage()">
+            <svg viewBox="0 0 24 24" class="img2">
+                <path fill="currentColor"
+                    d="M1.101,21.757L23.8,12.028L1.101,2.3l0.011,7.912l13.623,1.816L1.112,13.845 L1.101,21.757z"
+                    id="path"></path>
+            </svg>
+        </button>
+    </div>
+
+    <script>
+        const msg = document.getElementById("message");
+        const msgBox = document.getElementById("messages");
+        const om = document.getElementById("om");
+
+        let chats = {
+            sent: [],
+            received: [],
+        };
+
+        async function getChats() {
+            // Default options are marked with *
+            const res = await fetch(`https://v-chat-bice.vercel.app/getChats`)
+
+            // console.log(res.json()); // JSON data parsed by `data.json()` call
+            return res.json();
+        }
+
+        const displayMessage = (content, position) => {
+            const newMsg = document.createElement("span");
+            newMsg.classList.add(`msg`);
+            newMsg.classList.add(`msg-${position}`);
+            newMsg.innerHTML = content;
+
+            msgBox.appendChild(newMsg);
+        };
+
+        window.onload = () => {
+            if (!localStorage.getItem("username")) {
+                const userName = prompt("What is your Name?");
+                localStorage.setItem("username", userName);
+
+                let roomNumber = Math.floor(Date.now() / 1000) * parseInt(Math.random() * 10);
+
+                alert("Welcome to India's No.1 Chatting App. Your Room number is", roomNumber);
+
+                // localStorage.setItem("roomNumber", roomNumber);
+
+                (async function () {
+                    // Default options are marked with *
+                    try {
+                        const res = await fetch("https://v-chat-bice.vercel.app/username", {
+                            method: "POST",
+                            mode: "no-cors",
+                            headers: {
+                                // "Content-Type": "application/json",
+                                "Content-Type": "application/x-www-form-urlencoded",
+                            },
+                            body: JSON.stringify({ userName }), // body data type must match "Content-Type" header
+                        });  // JSON data parsed by `data.json()` call
+                    } catch (error) {
+                    }
+                })();
+            }
+
+            msg.focus();
+
+            getChats().then((data) => {
+                console.log(data);
+                data.map((item) => {
+                    if (item.sentFrom == localStorage.getItem("username")) {
+                        displayMessage(atob(atob(atob(item.content))), "right");
+                    } else {
+                        displayMessage(`<b>${item.sentFrom}:</b> ${atob(atob(atob(item.content)))}`, "left");
+                    }
+                });
+            });
+
+            setInterval(() => {
+                getChats().then((data) => {
+                    let prevHTML = msgBox.innerHTML;
+                    msgBox.innerHTML = "";
+                    data.map((item) => {
+                        if (item.sentFrom == localStorage.getItem("username")) {
+                            displayMessage(atob(atob(atob(item.content))), "right");
+                        } else {
+                            displayMessage(`<b>${item.sentFrom}:</b> ${atob(atob(atob(item.content)))}`, "left");
+                        }
+                    });
+                    if (prevHTML != msgBox.innerHTML) {
+                        msgBox.scrollTop = msgBox.scrollHeight;
+                    }
+                });
+            }, 3000);
+        };
+
+        // if (localStorage.getItem("chats")) {
+        //     chats = JSON.parse(localStorage.getItem("chats"));
+        //     chats.sent.forEach(chat => {
+        //         displayMessage(chat, "right");
+        //     });
+        //     chats.received.forEach(chat => {
+        //         displayMessage(chat, "left");
+        //     });
+        // }
+
+        const sendMessage = () => {
+            if (
+                msg.value != ""
+            ) {
+                displayMessage(msg.value, "right");
+                chats.sent.push(msg.value);
+                localStorage.setItem("chats", JSON.stringify(chats));
+
+                (async function () {
+                    // Default options are marked with *
+                    const res = await fetch("https://v-chat-bice.vercel.app/chat", {
+                        method: "POST",
+                        mode: "no-cors",
+                        headers: {
+                            // "Content-Type": "application/json",
+                            "Content-Type": "application/x-www-form-urlencoded",
+                        },
+                        body: JSON.stringify({
+                            userName: localStorage.getItem("username"),
+                            content: msg.value,
+                            // roomNumber: localStorage.getItem("roomNumber"),
+                        }), // body data type must match "Content-Type" header
+                    });
+                })();
+
+                msg.value = "";
+                msgBox.scrollTop = msgBox.scrollHeight;
+            }
+            else {
+                alert("Can't send empty message!");
+            }
+        };
+
+        const openOptionsMenu = () => {
+            let cond = om.style.display == "none";
+            om.style.display = cond ? "block" : "none";
+        };
+
+        const clearChats = () => {
+            const doClear = confirm("Do you sure want to clear your chats?");
+            if (doClear) {
+                chats.sent = [];
+                localStorage.setItem("chats", JSON.stringify(chats));
+                msgBox.innerHTML = "";
+            }
+        };
+    </script>
+
+</body>
+
+</html>
