@@ -395,11 +395,11 @@
                             displayMessage(`<b>${item.sentFrom}:</b> ${atob(atob(atob(item.content)))}`, "left", item._id);
                         }
                     });
-                    if (prevHTML != msgBox.innerHTML) {
-                        location.hash = data.at(-1)._id;
-                    }
                 });
             }, 3000);
+
+            openOptionsMenu();
+            document.getElementsByClassName("m-bar")[0].classList.toggle("m-bar2");
         };
 
         // if (localStorage.getItem("chats")) {
