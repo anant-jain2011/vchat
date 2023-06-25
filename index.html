@@ -50,6 +50,7 @@
             font-family: sans-serif;
             margin-left: 20px;
             font-size: x-large;
+            margin-right: 20px;
         }
 
         .c-bar {
@@ -126,16 +127,16 @@
         }
 
         .m-bar {
-            margin-top: 80px;
-            margin-bottom: 125px;
-            /* background-color: #fff; */
-            display: flex;
-            align-items: center;
+            margin-top: 20%;
             width: 100%;
-            position: absolute;
+            height: 66%;
+            overflow-y: scroll;
+            overflow-x: hidden;
+        }
+
+        .m-bar2 {
             z-index: -2;
-            height: 456px;
-            overflow-y: auto;
+            position: absolute;
         }
 
         ::-webkit-scrollbar {
@@ -173,6 +174,15 @@
             background-color: #25D366;
             float: right;
             clear: both;
+        }
+
+        @media only screen and (max-width: 640px) {
+            .msg-right {
+                margin-right: 4%;
+            }
+            .m-bar {
+                height: 70%;
+            }
         }
 
         .b-bar {
@@ -319,11 +329,15 @@
             return res.json();
         }
 
-        const displayMessage = (content, position) => {
+        const displayMessage = (content, position, id) => {
             const newMsg = document.createElement("span");
             newMsg.classList.add(`msg`);
             newMsg.classList.add(`msg-${position}`);
             newMsg.innerHTML = content;
+
+            if (id) {
+                newMsg.id = id;
+            }
 
             msgBox.appendChild(newMsg);
         };
@@ -362,9 +376,9 @@
                 console.log(data);
                 data.map((item) => {
                     if (item.sentFrom == localStorage.getItem("username")) {
-                        displayMessage(atob(atob(atob(item.content))), "right");
+                        displayMessage(atob(atob(atob(item.content))), "right", item._id);
                     } else {
-                        displayMessage(`<b>${item.sentFrom}:</b> ${atob(atob(atob(item.content)))}`, "left");
+                        displayMessage(`<b>${item.sentFrom}:</b> ${atob(atob(atob(item.content)))}`, "left", item._id);
                     }
                 });
             });
@@ -375,13 +389,13 @@
                     msgBox.innerHTML = "";
                     data.map((item) => {
                         if (item.sentFrom == localStorage.getItem("username")) {
-                            displayMessage(atob(atob(atob(item.content))), "right");
+                            displayMessage(atob(atob(atob(item.content))), "right", item._id);
                         } else {
-                            displayMessage(`<b>${item.sentFrom}:</b> ${atob(atob(atob(item.content)))}`, "left");
+                            displayMessage(`<b>${item.sentFrom}:</b> ${atob(atob(atob(item.content)))}`, "left", item._id);
                         }
                     });
                     if (prevHTML != msgBox.innerHTML) {
-                        msgBox.scrollTop = msgBox.scrollHeight;
+                        location.hash = data.at(-1)._id;
                     }
                 });
             }, 3000);
@@ -433,6 +447,7 @@
         const openOptionsMenu = () => {
             let cond = om.style.display == "none";
             om.style.display = cond ? "block" : "none";
+            document.getElementsByClassName("m-bar")[0].classList.toggle("m-bar2");
         };
 
         const clearChats = () => {
