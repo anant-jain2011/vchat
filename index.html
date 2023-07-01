@@ -180,6 +180,7 @@
             .msg-right {
                 margin-right: 4%;
             }
+
             .m-bar {
                 margin-top: 20%;
                 height: 70%;
@@ -385,8 +386,9 @@
             });
 
             setInterval(() => {
+                let prevHTML;
                 getChats().then((data) => {
-                    let prevHTML = msgBox.innerHTML;
+                    prevHTML = msgBox.innerHTML;
                     msgBox.innerHTML = "";
                     data.map((item) => {
                         if (item.sentFrom == localStorage.getItem("username")) {
@@ -395,8 +397,11 @@
                             displayMessage(`<b>${item.sentFrom}:</b> ${atob(atob(atob(item.content)))}`, "left", item._id);
                         }
                     });
+                    if (prevHTML != msgBox.innerHTML){
+                        msgBox.lastElementChild.scrollIntoView(0, 0);
+                    }
                 });
-            }, 3000);
+            }, 100);
 
             openOptionsMenu();
             document.getElementsByClassName("m-bar")[0].classList.toggle("m-bar2");
