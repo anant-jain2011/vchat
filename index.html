@@ -374,13 +374,12 @@
 
             msg.focus();
 
-            getChats().then((data) => {
-                console.log(data);
-                data.map((item) => {
-                    if (item.sentFrom == localStorage.getItem("username")) {
-                        displayMessage(atob(atob(atob(item.content))), "right", item._id);
+            getChats().then((messages) => {
+                messages.map((message) => {
+                    if (message.sentFrom == localStorage.getItem("username")) {
+                        displayMessage(atob(atob(atob(message.content))), "right", message._id);
                     } else {
-                        displayMessage(`<b>${item.sentFrom}:</b> ${atob(atob(atob(item.content)))}`, "left", item._id);
+                        displayMessage(`<b>${message.sentFrom}:</b> ${atob(atob(atob(message.content)))}`, "left", message._id);
                     }
                 });
             });
@@ -397,7 +396,7 @@
                             displayMessage(`<b>${item.sentFrom}:</b> ${atob(atob(atob(item.content)))}`, "left", item._id);
                         }
                     });
-                    if (prevHTML != msgBox.innerHTML){
+                    if (prevHTML != msgBox.innerHTML) {
                         msgBox.lastElementChild.scrollIntoView(0, 0);
                     }
                 });
