@@ -6,16 +6,19 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>V-Chat</title>
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5117750377623591"
-     crossorigin="anonymous"></script>
     <meta name="google-site-verification" content="67rdb6CJW98IpKb_qjIVqfLF1h4PWYGmqpNnE60DLJU" />
     <meta name="keywords" content="v-chat, vchat, vchats, v chat" />
     <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+        }
+
         body {
             background-image: radial-gradient(#25D366, #fff);
-            margin-left: 0;
             height: 99vh;
             overflow: hidden;
+            width: 100vw;
         }
 
         .t-bar {
@@ -42,12 +45,12 @@
             align-items: center;
         }
 
-        .arrow {
+        /* .arrow {
             height: 35px;
             width: 35px;
             margin-left: 30px;
             border-radius: 50%;
-        }
+        } */
 
         .name {
             font-weight: bold;
@@ -107,7 +110,6 @@
             margin-top: 100px;
             z-index: -1;
             display: none;
-            /* position: fixed; */
             float: right;
             border-top: 1px solid black;
             border-left: 1px solid black;
@@ -133,9 +135,13 @@
         .m-bar {
             margin-top: 100px;
             width: 100%;
-            height: 66%;
+            height: 60%;
             overflow-y: scroll;
             overflow-x: hidden;
+            margin-right: -20px;
+            /* margin-right: 15px; */
+            /* background: #fff; */
+            padding-bottom: 20px;
         }
 
         .m-bar2 {
@@ -148,17 +154,17 @@
         }
 
         .messages {
-            margin: auto;
             /* background-color: #000; */
-            height: auto;
-            width: 95%;
-            padding: 33px;
+            height: fit-content;
+            width: 100%;
+            padding: 6px;
+            margin-left: 10px;
         }
 
         .msg {
             margin: 5px 0px;
             display: inline;
-            padding: 10px 10px;
+            padding: 10px;
             border-radius: 3px;
             max-width: 50%;
             height: fit-content;
@@ -173,28 +179,45 @@
             background-color: #fff;
             float: left;
             clear: both;
+            border-radius: 30px 30px 30px 0px;
         }
 
         .msg-right {
             background-color: #25D366;
             float: right;
             clear: both;
+            border-radius: 30px 0px 30px 30px;
+            /* padding: 20px; */
+            padding-left: 12px;
         }
 
         @media only screen and (max-width: 640px) {
             .msg-right {
                 margin-right: 4%;
+                padding-right: -18px;
             }
 
             .m-bar {
                 margin-top: 20%;
-                height: 70%;
+                height: 60%;
+            }
+        }
+
+        @media only screen and (max-width: 440px) {
+            .msg-right {
+                margin-right: 4%;
+                padding-right: -18px;
+            }
+
+            .m-bar {
+                margin-top: 25%;
+                height: 64%;
             }
         }
 
         .b-bar {
             position: fixed;
-            bottom: 0;
+            bottom: 0px;
             width: 100%;
             height: 100px;
             display: flex;
@@ -289,6 +312,7 @@
 
         </div>
     </div>
+
     <div class="om" id="om">
         <li>Option 1</li>
         <li>Option 2</li>
@@ -329,7 +353,6 @@
         };
 
         async function getChats() {
-            // Default options are marked with *
             const res = await fetch(`https://v-chat-bice.vercel.app/getChats`)
 
             // console.log(res.json()); // JSON data parsed by `data.json()` call
@@ -341,6 +364,8 @@
             newMsg.classList.add(`msg`);
             newMsg.classList.add(`msg-${position}`);
             newMsg.innerHTML = content;
+
+            const arrow = document.createElement("span");
 
             if (id) {
                 newMsg.id = id;
@@ -389,37 +414,29 @@
                 });
             });
 
-            setInterval(() => {
-                let prevHTML;
-                getChats().then((data) => {
-                    prevHTML = msgBox.innerHTML;
-                    msgBox.innerHTML = "";
-                    data.map((item) => {
-                        if (item.sentFrom == localStorage.getItem("username")) {
-                            displayMessage(atob(atob(atob(item.content))), "right", item._id);
-                        } else {
-                            displayMessage(`<b>${item.sentFrom}:</b> ${atob(atob(atob(item.content)))}`, "left", item._id);
+            if (!location.href.includes("autoRefresh")) {
+                setInterval(() => {
+                    let prevHTML;
+                    getChats().then((data) => {
+                        prevHTML = msgBox.innerHTML;
+                        msgBox.innerHTML = "";
+                        data.map((item) => {
+                            if (item.sentFrom == localStorage.getItem("username")) {
+                                displayMessage(atob(atob(atob(item.content))), "right", item._id);
+                            } else {
+                                displayMessage(`<b>${item.sentFrom}:</b> ${atob(atob(atob(item.content)))}`, "left", item._id);
+                            }
+                        });
+                        if (prevHTML != msgBox.innerHTML) {
+                            msgBox.lastElementChild.scrollIntoView(0, 0);
                         }
                     });
-                    if (prevHTML != msgBox.innerHTML) {
-                        msgBox.lastElementChild.scrollIntoView(0, 0);
-                    }
-                });
-            }, 100);
+                }, 100);
+            }
 
             openOptionsMenu();
             document.getElementsByClassName("m-bar")[0].classList.toggle("m-bar2");
         };
-
-        // if (localStorage.getItem("chats")) {
-        //     chats = JSON.parse(localStorage.getItem("chats"));
-        //     chats.sent.forEach(chat => {
-        //         displayMessage(chat, "right");
-        //     });
-        //     chats.received.forEach(chat => {
-        //         displayMessage(chat, "left");
-        //     });
-        // }
 
         const sendMessage = () => {
             if (
@@ -469,7 +486,6 @@
             }
         };
     </script>
-
 </body>
 
 </html>
