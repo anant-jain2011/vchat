@@ -12,11 +12,12 @@
         * {
             margin: 0px;
             padding: 0px;
+            font-family: sans-serif;
         }
 
         body {
             background-image: radial-gradient(#25D366, #fff);
-            height: 99vh;
+            height: 100vh;
             overflow: hidden;
             width: 100vw;
         }
@@ -54,7 +55,6 @@
 
         .name {
             font-weight: bold;
-            font-family: sans-serif;
             margin-left: 20px;
             font-size: x-large;
             margin-right: 20px;
@@ -98,34 +98,40 @@
         }
 
         .om {
+            width: 150px;
+            right: 10px;
+            top: 110px;
             background-color: #fff;
-            margin-right: 10px;
-            height: 195px;
-            display: flex;
+            border: 2px solid black;
+            display: none;
             justify-content: space-around;
             align-items: center;
-            width: 150px;
             flex-direction: column;
             list-style: none;
-            margin-top: 100px;
-            z-index: -1;
-            display: none;
+            position: relative;
             float: right;
-            border-top: 1px solid black;
-            border-left: 1px solid black;
-            border-right: 1px solid black;
+            border-radius: 15px;
         }
 
         li {
             cursor: pointer;
+            border-top: 1px solid black;
             border-bottom: 1px solid black;
-            /* border-top: 1px solid black; */
             width: 100%;
             text-align: center;
             padding-top: 10px;
             padding-bottom: 10px;
             margin-top: 0px;
             vertical-align: middle;
+        }
+
+        li:last-child {
+            border-bottom: none;
+        }
+
+
+        li:first-child {
+            border-top: none;
         }
 
         li::selection {
@@ -135,30 +141,25 @@
         .m-bar {
             margin-top: 100px;
             width: 100%;
-            height: 60%;
+            height: calc(100% - 204px);
             overflow-y: scroll;
             overflow-x: hidden;
-            margin-right: -20px;
-            /* margin-right: 15px; */
-            /* background: #fff; */
-            padding-bottom: 20px;
+            padding-left: 10px;
+            padding-right: 10px;
         }
 
-        .m-bar2 {
-            z-index: -2;
+        /* .m-bar2 {
             position: absolute;
-        }
+        } */
 
         ::-webkit-scrollbar {
             appearance: none;
         }
 
         .messages {
-            /* background-color: #000; */
-            height: fit-content;
+            background-color: #000;
+            height: auto;
             width: 100%;
-            padding: 6px;
-            margin-left: 10px;
         }
 
         .msg {
@@ -176,7 +177,7 @@
         }
 
         .msg-left {
-            background-color: #fff;
+            background: #fff;
             float: left;
             clear: both;
             border-radius: 30px 30px 30px 0px;
@@ -187,31 +188,16 @@
             float: right;
             clear: both;
             border-radius: 30px 0px 30px 30px;
-            /* padding: 20px; */
             padding-left: 12px;
         }
 
-        @media only screen and (max-width: 640px) {
-            .msg-right {
-                margin-right: 4%;
-                padding-right: -18px;
-            }
-
-            .m-bar {
-                margin-top: 20%;
-                height: 60%;
-            }
-        }
-
         @media only screen and (max-width: 440px) {
-            .msg-right {
-                margin-right: 4%;
-                padding-right: -18px;
+            .m-bar {
+                height: calc(100% - 225px);
             }
 
-            .m-bar {
-                margin-top: 25%;
-                height: 64%;
+            .c-bar {
+                margin-right: -5px;
             }
         }
 
@@ -227,7 +213,6 @@
 
         .form {
             width: 100%;
-            /* background-color: #fff; */
             display: flex;
             justify-content: center;
         }
@@ -251,6 +236,7 @@
             margin-right: 20px;
             width: 100%;
             border-radius: 30px;
+            padding-left: 5px;
         }
 
         input:focus {
@@ -295,11 +281,16 @@
         #path {
             fill: #fff;
         }
+
+        a {
+            text-decoration: none;
+            color: blue;
+        }
     </style>
 </head>
 
 <body>
-    <div class="t-bar">
+    <div class="t-bar" hidden>
         <div class="i-bar">
             <!-- <img src="https://cdn-icons-png.flaticon.com/128/507/507257.png" alt="" class="arrow"> -->
             <img src="./src/avatar.png" alt="" class="profile">
@@ -309,7 +300,6 @@
             <img src="./src/phone-call-button.png" class="voi-c">
             <img src="./src/zoom.png" class="vid-c">
             <span class="t-dots" onclick="openOptionsMenu()">...</span>
-
         </div>
     </div>
 
@@ -326,7 +316,7 @@
         </div>
     </div>
 
-    <div class="b-bar">
+    <div class="b-bar" hidden>
         <div class="voice">
             <img src="./src/voice.png" alt="" class="img1">
         </div>
@@ -355,11 +345,15 @@
         async function getChats() {
             const res = await fetch(`https://v-chat-bice.vercel.app/getChats`)
 
-            // console.log(res.json()); // JSON data parsed by `data.json()` call
             return res.json();
         }
 
         const displayMessage = (content, position, id) => {
+            var urlRegex = /https?:\/\/[^\s/$.?#].[^\s]*/g;
+            if (content.match(urlRegex)) {
+                content = content.replace(content.match(urlRegex), `<a href="${content.match(urlRegex)}" target="_blank">${content.match(urlRegex)}</a>`);
+            }
+
             const newMsg = document.createElement("span");
             newMsg.classList.add(`msg`);
             newMsg.classList.add(`msg-${position}`);
@@ -383,22 +377,17 @@
 
                 alert("Welcome to India's No.1 Chatting App. Your Room number is", roomNumber);
 
-                // localStorage.setItem("roomNumber", roomNumber);
-
                 (async function () {
-                    // Default options are marked with *
                     try {
                         const res = await fetch("https://v-chat-bice.vercel.app/username", {
                             method: "POST",
                             mode: "no-cors",
                             headers: {
-                                // "Content-Type": "application/json",
                                 "Content-Type": "application/x-www-form-urlencoded",
                             },
-                            body: JSON.stringify({ userName }), // body data type must match "Content-Type" header
-                        });  // JSON data parsed by `data.json()` call
-                    } catch (error) {
-                    }
+                            body: JSON.stringify({ userName }),
+                        });
+                    } catch (error) { }
                 })();
             }
 
@@ -431,7 +420,7 @@
                             msgBox.lastElementChild.scrollIntoView(0, 0);
                         }
                     });
-                }, 100);
+                }, 1000);
             }
 
             openOptionsMenu();
@@ -439,28 +428,24 @@
         };
 
         const sendMessage = () => {
-            if (
-                msg.value != ""
-            ) {
-                displayMessage(msg.value, "right");
+            if (msg.value != "") {
                 chats.sent.push(msg.value);
                 localStorage.setItem("chats", JSON.stringify(chats));
 
                 (async function () {
-                    // Default options are marked with *
                     const res = await fetch("https://v-chat-bice.vercel.app/chat", {
                         method: "POST",
                         mode: "no-cors",
                         headers: {
-                            // "Content-Type": "application/json",
                             "Content-Type": "application/x-www-form-urlencoded",
                         },
                         body: JSON.stringify({
                             userName: localStorage.getItem("username"),
                             content: msg.value,
                             // roomNumber: localStorage.getItem("roomNumber"),
-                        }), // body data type must match "Content-Type" header
+                        }),
                     });
+                    displayMessage(msg.value, "right");
                 })();
 
                 msg.value = "";
@@ -473,8 +458,8 @@
 
         const openOptionsMenu = () => {
             let cond = om.style.display == "none";
-            om.style.display = cond ? "block" : "none";
-            document.getElementsByClassName("m-bar")[0].classList.toggle("m-bar2");
+            om.style.display = cond ? "flex" : "none";
+            // document.getElementsByClassName("m-bar")[0].classList.toggle("m-bar2");
         };
 
         const clearChats = () => {
