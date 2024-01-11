@@ -2,6 +2,7 @@
     margin: 0px;
     padding: 0px;
     font-family: sans-serif;
+    user-select: none;
 }
 
 body {
@@ -130,24 +131,18 @@ li::selection {
 .m-bar {
     margin-top: 100px;
     width: 100%;
-    height: calc(100% - 204px);
+    height: calc(100% - 205px);
     overflow-y: scroll;
     overflow-x: hidden;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 8px;
 }
-
-/* .m-bar2 {
-    position: absolute;
-} */
 
 ::-webkit-scrollbar {
     appearance: none;
 }
 
 .messages {
-    background-color: #000;
-    height: auto;
+    height: 100%;
     width: 100%;
 }
 

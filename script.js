@@ -9,9 +9,11 @@ let chats = {
 
 const baseUrl = "https://v-chat-bice.vercel.app";
 
+const eventSource = new EventSource(baseUrl + '/events');
+
 function decodeMessage(message, dateStr) {
     const date = new Date(dateStr);
-    if (date.getFullYear() < 2024){
+    if (date.getFullYear() < 2024) {
         return atob(atob(atob(message)));
     } else {
         return decodeURI(decodeURI(atob(message)));
@@ -70,35 +72,30 @@ window.onload = () => {
     msg.focus();
 
     getChats().then((messages) => {
-        console.log(messages[0].createdAt);
         messages.map((message) => {
             if (message.sentFrom == localStorage.getItem("username")) {
                 displayMessage(decodeMessage(message.content, message.createdAt), "right", message._id);
             } else {
                 displayMessage(`<b>${message.sentFrom}:</b> ${decodeMessage(message.content, message.createdAt)}`, "left", message._id);
             }
+            msgBox.parentElement.scrollTop = msgBox.parentElement.scrollHeight;
         });
     });
 
-    if (!location.href.includes("autoRefresh")) {
-        setInterval(() => {
-            let prevHTML;
-            getChats().then((data) => {
-                prevHTML = msgBox.innerHTML;
-                msgBox.innerHTML = "";
-                data.map((item) => {
-                    if (item.sentFrom == localStorage.getItem("username")) {
-                        displayMessage(decodeMessage(item.content, item.createdAt), "right", item._id);
-                    } else {
-                        displayMessage(`<b>${item.sentFrom}:</b> ${decodeMessage(item.content, item.createdAt)}`, "left", item._id);
-                    }
-                });
-                if (prevHTML != msgBox.innerHTML) {
-                    msgBox.lastElementChild.scrollIntoView(0, 0);
+    eventSource.onmessage = function (event) {
+        getChats().then((data) => {
+            msgBox.innerHTML = "";
+            data.map((item) => {
+                if (item.sentFrom == localStorage.getItem("username")) {
+                    displayMessage(decodeMessage(item.content, item.createdAt), "right", item._id);
+                } else {
+                    displayMessage(`<b>${item.sentFrom}:</b> ${decodeMessage(item.content, item.createdAt)}`, "left", item._id);
                 }
             });
-        }, 1000);
-    }
+            msgBox.parentElement.scrollTop = msgBox.parentElement.scrollHeight;
+        });
+
+    };
 
     openOptionsMenu();
     document.getElementsByClassName("m-bar")[0].classList.toggle("m-bar2");
@@ -109,6 +106,9 @@ const sendMessage = () => {
         chats.sent.push(msg.value);
         localStorage.setItem("chats", JSON.stringify(chats));
 
+        msgBox.parentElement.scrollTop = msgBox.parentElement.scrollHeight;
+        displayMessage(msg.value, "right");
+
         (async function () {
             const res = await fetch(baseUrl + "/chat", {
                 method: "POST",
@@ -118,14 +118,12 @@ const sendMessage = () => {
                 body: JSON.stringify({
                     userName: localStorage.getItem("username"),
                     content: msg.value,
-                    // roomNumber: localStorage.getItem("roomNumber"),
+                    // roomNumber: localStorage.getItem("roomNumber")
                 }),
             });
-            displayMessage(msg.value, "right");
         })();
 
         msg.value = "";
-        msgBox.scrollTop = msgBox.scrollHeight;
     }
     else {
         alert("Can't send empty message!");
