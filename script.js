@@ -11,6 +11,15 @@ const baseUrl = "https://v-chat-bice.vercel.app";
 
 const eventSource = new EventSource(baseUrl + '/events');
 
+// Reconnection logic for EventSource
+eventSource.onerror = function (event) {
+    if (event.readyState === EventSource.CLOSED) {
+        // Reconnection logic here
+        console.log("Reconnecting to EventSource...");
+        eventSource = new EventSource(baseUrl + '/events');
+    }
+};
+
 function decodeMessage(message, dateStr) {
     const date = new Date(dateStr);
     if (date.getFullYear() < 2024) {
@@ -91,8 +100,8 @@ window.onload = () => {
                 } else {
                     displayMessage(`<b>${item.sentFrom}:</b> ${decodeMessage(item.content, item.createdAt)}`, "left", item._id);
                 }
+                msgBox.parentElement.scrollTop = msgBox.parentElement.scrollHeight;
             });
-            msgBox.parentElement.scrollTop = msgBox.parentElement.scrollHeight;
         });
 
     };
@@ -106,8 +115,8 @@ const sendMessage = () => {
         chats.sent.push(msg.value);
         localStorage.setItem("chats", JSON.stringify(chats));
 
-        msgBox.parentElement.scrollTop = msgBox.parentElement.scrollHeight;
         displayMessage(msg.value, "right");
+        msgBox.parentElement.scrollTop = msgBox.parentElement.scrollHeight;
 
         (async function () {
             const res = await fetch(baseUrl + "/chat", {

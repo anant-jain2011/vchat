@@ -177,7 +177,7 @@ li::selection {
 
 @media only screen and (max-width: 440px) {
     .m-bar {
-        height: calc(100% - 225px);
+        height: calc(100% - 250px);
     }
 
     .c-bar {
