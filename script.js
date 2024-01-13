@@ -7,7 +7,7 @@ let chats = {
     received: [],
 };
 
-const baseUrl = "https://v-chat-bice.vercel.app";
+const baseUrl = "https://vchat-4ldl.onrender.com";
 
 const eventSource = new EventSource(baseUrl + '/events');
 
