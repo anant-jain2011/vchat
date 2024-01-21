@@ -22,6 +22,7 @@ eventSource.onerror = function (event) {
 
 function decodeMessage(message, dateStr) {
     const date = new Date(dateStr);
+
     if (date.getFullYear() < 2024) {
         return atob(atob(atob(message)));
     } else {
@@ -92,18 +93,15 @@ window.onload = () => {
     });
 
     eventSource.onmessage = function (event) {
-        getChats().then((data) => {
-            msgBox.innerHTML = "";
-            data.map((item) => {
-                if (item.sentFrom == localStorage.getItem("username")) {
-                    displayMessage(decodeMessage(item.content, item.createdAt), "right", item._id);
-                } else {
-                    displayMessage(`<b>${item.sentFrom}:</b> ${decodeMessage(item.content, item.createdAt)}`, "left", item._id);
-                }
-                msgBox.parentElement.scrollTop = msgBox.parentElement.scrollHeight;
-            });
-        });
+        let item = event.newMessage;
 
+        if (item.sentFrom == localStorage.getItem("username")) {
+            displayMessage(decodeMessage(item.content, item.createdAt), "right", item._id);
+        } else {
+            displayMessage(`<b>${item.sentFrom}:</b> ${decodeMessage(item.content, item.createdAt)}`, "left", item._id);
+        }
+
+        msgBox.parentElement.scrollTop = msgBox.parentElement.scrollHeight;
     };
 
     openOptionsMenu();
