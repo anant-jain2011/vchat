@@ -18,6 +18,7 @@ eventSource.onerror = function (event) {
         console.log("Reconnecting to EventSource...");
         eventSource = new EventSource(baseUrl + '/events');
     }
+    console.log("error occured");
 };
 
 function decodeMessage(message, dateStr) {
@@ -57,8 +58,8 @@ const displayMessage = (content, position, id) => {
 };
 
 eventSource.onmessage = function (event) {
+    console.log(event.data);
     let item = (typeof event.data) == "string" ? JSON.parse(event.data).newMessage : event.data.newMessage;
-    console.log(event.data, item);
 
     if (item.sentFrom == localStorage.getItem("username")) {
         displayMessage(decodeMessage(item.content, item.createdAt), "right", item._id);
