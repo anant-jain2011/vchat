@@ -16,6 +16,7 @@ eventSource.onerror = function (event) {
     if (event.readyState === EventSource.CLOSED) {
         // Reconnection logic here
         console.log("Reconnecting to EventSource...");
+        event.close();
         eventSource = new EventSource(baseUrl + '/events');
     }
     console.log("error occured");
