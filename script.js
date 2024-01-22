@@ -56,6 +56,19 @@ const displayMessage = (content, position, id) => {
     msgBox.appendChild(newMsg);
 };
 
+eventSource.onmessage = function (event) {
+    let item = (typeof event.data) == "string" ? JSON.parse(event.data).newMessage : event.data.newMessage;
+    console.log(event.data, item);
+
+    if (item.sentFrom == localStorage.getItem("username")) {
+        displayMessage(decodeMessage(item.content, item.createdAt), "right", item._id);
+    } else {
+        displayMessage(`<b>${item.sentFrom}:</b> ${decodeMessage(item.content, item.createdAt)}`, "left", item._id);
+    }
+
+    msgBox.parentElement.scrollTop = msgBox.parentElement.scrollHeight;
+};
+
 window.onload = () => {
     if (!localStorage.getItem("username")) {
         const userName = prompt("What is your Name?");
@@ -91,18 +104,6 @@ window.onload = () => {
             msgBox.parentElement.scrollTop = msgBox.parentElement.scrollHeight;
         });
     });
-
-    eventSource.onmessage = function (event) {
-        let item = (typeof event.data) == "string" ? JSON.parse(event.data).newMessage : event.data.newMessage;
-
-        if (item.sentFrom == localStorage.getItem("username")) {
-            displayMessage(decodeMessage(item.content, item.createdAt), "right", item._id);
-        } else {
-            displayMessage(`<b>${item.sentFrom}:</b> ${decodeMessage(item.content, item.createdAt)}`, "left", item._id);
-        }
-
-        msgBox.parentElement.scrollTop = msgBox.parentElement.scrollHeight;
-    };
 
     openOptionsMenu();
     document.getElementsByClassName("m-bar")[0].classList.toggle("m-bar2");
