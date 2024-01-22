@@ -93,7 +93,7 @@ window.onload = () => {
     });
 
     eventSource.onmessage = function (event) {
-        let item = event.newMessage;
+        let item = (typeof event.data) == "string" ? JSON.parse(event.data).newMessage : event.data.newMessage;
 
         if (item.sentFrom == localStorage.getItem("username")) {
             displayMessage(decodeMessage(item.content, item.createdAt), "right", item._id);
