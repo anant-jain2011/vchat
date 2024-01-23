@@ -20,7 +20,6 @@ eventSource.onerror = function (event) {
         eventSource = new EventSource(baseUrl + '/events');
         console.log("error solved");
     }
-    console.log("error occured");
 };
 
 function decodeMessage(message, dateStr) {
@@ -96,13 +95,10 @@ window.onload = () => {
     });
 
     eventSource.addEventListener("message", (event) => {
-        console.log(event.data);
         let item = (typeof event.data) == "string" ? JSON.parse(event.data).newMessage : event.data.newMessage;
 
         if (item.sentFrom == localStorage.getItem("username")) {
             displayMessage(decodeMessage(item.content, item.createdAt), "right", item._id);
-        } else {
-            displayMessage(`<b>${item.sentFrom}:</b> ${decodeMessage(item.content, item.createdAt)}`, "left", item._id);
         }
 
         msgBox.parentElement.scrollTop = msgBox.parentElement.scrollHeight;
