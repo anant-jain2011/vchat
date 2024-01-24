@@ -1,6 +1,7 @@
 const msg = document.getElementById("message");
 const msgBox = document.getElementById("messages");
 const om = document.getElementById("om");
+const everyMessage = document.querySelectorAll(".msg");
 
 let chats = {
     sent: [],
@@ -58,6 +59,28 @@ const displayMessage = (content, position, id) => {
     msgBox.appendChild(newMsg);
 };
 
+const deleteSelected = async () => {
+    const selected = localStorage.getItem("selected").trim().split(" ");
+
+    let res = await fetch(baseUrl + "/deletechats", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            selected,
+        }),
+    });
+
+    let data = await res.json();
+
+    if (data.success) {
+        selected.forEach(id => {
+            document.getElementById(id).remove();
+        });
+    }
+};
+
 window.onload = () => {
     if (!localStorage.getItem("username")) {
         const userName = prompt("What is your Name?");
@@ -102,6 +125,48 @@ window.onload = () => {
         }
 
         msgBox.parentElement.scrollTop = msgBox.parentElement.scrollHeight;
+    });
+
+    localStorage.setItem("selected", "");
+
+    let prevBg = everyMessage[0].style.backgroundColor;
+    
+    everyMessage.forEach(msg => {
+        msg.addEventListener("mousedown", () => {
+            let timeOut = setTimeout(() => {
+                msg.style.backgroundColor = "gray";
+                
+                dlen.parentElement.style.display = "flex";
+                
+                localStorage.setItem("selected", localStorage.getItem("selected") + msg.id + " ");
+
+                const removeFromSelected = () => {
+                    msg.style.backgroundColor = prevBg;
+            
+                    localStorage.setItem("selected", localStorage.getItem("selected").replaceAll(msg.id + " ", ""));
+
+                    dlen.innerHTML = "Delete " + localStorage.getItem("selected").trim().split(" ").length + " Chat(s)";
+
+                    if (localStorage.getItem("selected").trim().split(" ")[0] == "") {
+                        dlen.parentElement.style.display = "none";
+                    }
+            
+                    msg.removeEventListener("click", removeFromSelected);
+                }
+                
+                dlen.innerHTML = "Delete " + localStorage.getItem("selected").trim().split(" ").length + " Chat(s)";
+
+                setTimeout(() => {
+                    msg.addEventListener("click", removeFromSelected);
+                }, 500);
+            }, 500);
+
+            localStorage.setItem("timeOut", timeOut);
+        });
+
+        msg.addEventListener("mouseup", () => {
+            clearTimeout(localStorage.getItem("timeOut"));
+        });
     });
 
     openOptionsMenu();

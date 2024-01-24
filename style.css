@@ -21,6 +21,7 @@ body {
     align-items: center;
     background-color: #25D366;
     justify-content: space-between;
+    z-index: -1;
 }
 
 .profile {
@@ -85,6 +86,37 @@ body {
 
 .t-dots::selection {
     background-color: transparent;
+}
+
+.deletor {
+    width: 50%;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    position: absolute;
+    text-align: center;
+    top: 15px;
+    background: #fff;
+    left: 25%;
+    border-radius: 10px;
+    font-size: 18px;
+    letter-spacing: 1px;
+    display: none;
+}
+
+#dlen {
+    width: fit-content;
+    height: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #5270ff;
+    padding: 12px;
+    border-radius: 12px;
+    color: #fcfcfc;
+    cursor: pointer;
 }
 
 .om {
