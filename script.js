@@ -114,8 +114,6 @@ window.onload = async () => {
             }
             msgBox.parentElement.scrollTop = msgBox.parentElement.scrollHeight;
         });
-
-        var everyMessage = document.querySelectorAll(".msg");
     });
 
     eventSource.addEventListener("message", (event) => {
@@ -130,9 +128,9 @@ window.onload = async () => {
 
     localStorage.setItem("selected", "");
 
-    let prevBg = everyMessage[0].style.backgroundColor;
+    let prevBg = document.querySelectorAll(".msg")[0].style.backgroundColor;
     
-    everyMessage.forEach(msg => {
+    document.querySelectorAll(".msg").forEach(msg => {
         msg.addEventListener("mousedown", () => {
             let timeOut = setTimeout(() => {
                 msg.style.backgroundColor = "gray";
