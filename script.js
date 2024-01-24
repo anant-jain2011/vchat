@@ -1,7 +1,6 @@
 const msg = document.getElementById("message");
 const msgBox = document.getElementById("messages");
 const om = document.getElementById("om");
-const everyMessage = document.querySelectorAll(".msg");
 
 let chats = {
     sent: [],
@@ -115,6 +114,8 @@ window.onload = async () => {
             }
             msgBox.parentElement.scrollTop = msgBox.parentElement.scrollHeight;
         });
+
+        var everyMessage = document.querySelectorAll(".msg");
     });
 
     eventSource.addEventListener("message", (event) => {
@@ -128,7 +129,7 @@ window.onload = async () => {
     });
 
     localStorage.setItem("selected", "");
-    
+
     let prevBg = everyMessage[0].style.backgroundColor;
     
     everyMessage.forEach(msg => {
