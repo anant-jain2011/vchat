@@ -81,7 +81,7 @@ const deleteSelected = async () => {
     }
 };
 
-window.onload = () => {
+window.onload = async () => {
     if (!localStorage.getItem("username")) {
         const userName = prompt("What is your Name?");
         localStorage.setItem("username", userName);
@@ -106,7 +106,7 @@ window.onload = () => {
 
     msg.focus();
 
-    getChats().then((messages) => {
+    await getChats().then((messages) => {
         messages.map((message) => {
             if (message.sentFrom == localStorage.getItem("username")) {
                 displayMessage(decodeMessage(message.content, message.createdAt), "right", message._id);
@@ -128,7 +128,7 @@ window.onload = () => {
     });
 
     localStorage.setItem("selected", "");
-
+    
     let prevBg = everyMessage[0].style.backgroundColor;
     
     everyMessage.forEach(msg => {
