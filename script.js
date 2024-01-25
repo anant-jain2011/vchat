@@ -178,14 +178,6 @@ window.onload = async () => {
     });
 });
 
-// Add this to ensure the event listeners are initially set up
-document.querySelectorAll(".msg").forEach(msg => {
-    msg.addEventListener("click", () => {
-        toggleSelected();
-    });
-});
-
-
     openOptionsMenu();
 };
 
