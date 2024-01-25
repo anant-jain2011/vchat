@@ -77,6 +77,10 @@ const deleteSelected = async () => {
         selected.forEach(id => {
             document.getElementById(id).remove();
         });
+
+	localStorage.setItem("selected", "");
+	
+	dlen.parentElement.style.display = "none";
     }
 };
 
@@ -119,8 +123,8 @@ window.onload = async () => {
     eventSource.addEventListener("message", (event) => {
         let item = (typeof event.data) == "string" ? JSON.parse(event.data).newMessage : event.data.newMessage;
 
-        if (item.sentFrom == localStorage.getItem("username")) {
-            displayMessage(decodeMessage(item.content, item.createdAt), "right", item._id);
+        if (item.sentFrom != localStorage.getItem("username")) {
+            displayMessage(decodeMessage(item.content, item.createdAt), "left", item._id);
         }
 
         msgBox.parentElement.scrollTop = msgBox.parentElement.scrollHeight;
