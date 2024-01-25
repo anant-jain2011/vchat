@@ -208,8 +208,8 @@ li::selection {
 
 @media only screen and (max-width: 440px) {
     .m-bar {
-        height: calc(100% - 250px);
-	margin-top: 105px;
+        height: calc(100% - 252px);
+	margin-top: 102px;
     }
 
     .c-bar {
