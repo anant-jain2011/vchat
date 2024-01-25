@@ -124,7 +124,7 @@ window.onload = async () => {
         let item = (typeof event.data) == "string" ? JSON.parse(event.data).newMessage : event.data.newMessage;
 
         if (item.sentFrom != localStorage.getItem("username")) {
-            displayMessage(decodeMessage(item.content, item.createdAt), "left", item._id);
+            displayMessage(`<b>${message.sentFrom}:</b> ${decodeMessage(message.content, message.createdAt)}`, "left", message._id);
         }
 
         msgBox.parentElement.scrollTop = msgBox.parentElement.scrollHeight;
@@ -141,28 +141,32 @@ window.onload = async () => {
                 
                 dlen.parentElement.style.display = "flex";
                 
-                localStorage.setItem("selected", localStorage.getItem("selected") + msg.id + " ");
+		if (!localStorage.getItem("selected").includes(msg.id)) {
+	            localStorage.setItem("selected", localStorage.getItem("selected") + msg.id + " ");
+		}
 
-                const removeFromSelected = () => {
+                const toggleSelected = () => {
                     msg.style.backgroundColor = prevBg;
-            
-                    localStorage.setItem("selected", localStorage.getItem("selected").replaceAll(msg.id + " ", ""));
 
-                    dlen.innerHTML = "Delete " + localStorage.getItem("selected").trim().split(" ").length + " Chat(s)";
+		    if (!localStorage.getItem("selected").includes(msg.id)) {
+	                localStorage.setItem("selected", localStorage.getItem("selected") + msg.id + " ");
+		    } else {
+	        	localStorage.setItem("selected", localStorage.getItem("selected").replaceAll(msg.id + " ", ""));
+
+                        dlen.innerHTML = "Delete " + localStorage.getItem("selected").trim().split(" ").length + " Chat(s)";
+		    }
 
                     if (localStorage.getItem("selected").trim().split(" ")[0] == "") {
                         dlen.parentElement.style.display = "none";
-                    }
             
-                    msg.removeEventListener("click", removeFromSelected);
+        		document.querySelectorAll(".msg").forEach(msg2 => msg2.removeEventListener("click", toggleSelected));
+                    }
                 }
                 
                 dlen.innerHTML = "Delete " + localStorage.getItem("selected").trim().split(" ").length + " Chat(s)";
 
-                setTimeout(() => {
-                    msg.addEventListener("click", removeFromSelected);
-                }, 500);
-            }, 500);
+                document.querySelectorAll(".msg").forEach(msg2 => msg2.addEventListener("click", toggleSelected));
+            }, 1000);
 
             localStorage.setItem("timeOut", timeOut);
         });
