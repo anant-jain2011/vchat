@@ -135,17 +135,7 @@ window.onload = async () => {
     let prevBg = document.querySelectorAll(".msg")[0].style.backgroundColor;
     
     document.querySelectorAll(".msg").forEach(msg => {
-        msg.addEventListener("pointerdown", () => {
-            let timeOut = setTimeout(() => {
-                msg.style.backgroundColor = "gray";
-                
-                dlen.parentElement.style.display = "flex";
-                
-		if (!localStorage.getItem("selected").includes(msg.id)) {
-	            localStorage.setItem("selected", localStorage.getItem("selected") + msg.id + " ");
-		}
-
-                const toggleSelected = () => {
+	const toggleSelected = () => {
                     msg.style.backgroundColor = prevBg;
 
 		    if (!localStorage.getItem("selected").includes(msg.id)) {
@@ -162,6 +152,16 @@ window.onload = async () => {
         		document.querySelectorAll(".msg").forEach(msg2 => msg2.removeEventListener("click", toggleSelected));
                     }
                 }
+
+        msg.addEventListener("pointerdown", () => {
+            let timeOut = setTimeout(() => {
+                msg.style.backgroundColor = "gray";
+                
+                dlen.parentElement.style.display = "flex";
+                
+		if (!localStorage.getItem("selected").includes(msg.id)) {
+	            localStorage.setItem("selected", localStorage.getItem("selected") + msg.id + " ");
+		}
                 
                 dlen.innerHTML = "Delete " + localStorage.getItem("selected").trim().split(" ").length + " Chat(s)";
 
