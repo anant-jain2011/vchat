@@ -135,7 +135,7 @@ window.onload = async () => {
     let prevBg = document.querySelectorAll(".msg")[0].style.backgroundColor;
     
     document.querySelectorAll(".msg").forEach(msg => {
-        msg.addEventListener("mousedown", () => {
+        msg.addEventListener("pointerdown", () => {
             let timeOut = setTimeout(() => {
                 msg.style.backgroundColor = "gray";
                 
@@ -167,7 +167,7 @@ window.onload = async () => {
             localStorage.setItem("timeOut", timeOut);
         });
 
-        msg.addEventListener("mouseup", () => {
+        msg.addEventListener("pointerup", () => {
             clearTimeout(localStorage.getItem("timeOut"));
         });
     });
