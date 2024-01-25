@@ -135,46 +135,56 @@ window.onload = async () => {
     let prevBg = document.querySelectorAll(".msg")[0].style.backgroundColor;
     
     document.querySelectorAll(".msg").forEach(msg => {
-	const toggleSelected = () => {
-                    msg.style.backgroundColor = prevBg;
+    const toggleSelected = () => {
+        msg.style.backgroundColor = prevBg;
 
-		    if (!localStorage.getItem("selected").includes(msg.id)) {
-	                localStorage.setItem("selected", localStorage.getItem("selected") + msg.id + " ");
-		    } else {
-	        	localStorage.setItem("selected", localStorage.getItem("selected").replaceAll(msg.id + " ", ""));
+        if (!localStorage.getItem("selected").includes(msg.id)) {
+            localStorage.setItem("selected", localStorage.getItem("selected") + msg.id + " ");
+        } else {
+            localStorage.setItem("selected", localStorage.getItem("selected").replaceAll(msg.id + " ", ""));
 
-                        dlen.innerHTML = "Delete " + localStorage.getItem("selected").trim().split(" ").length + " Chat(s)";
-		    }
+            dlen.innerHTML = "Delete " + localStorage.getItem("selected").trim().split(" ").length + " Chat(s)";
+        }
 
-                    if (localStorage.getItem("selected").trim().split(" ")[0] == "") {
-                        dlen.parentElement.style.display = "none";
-            
-        		document.querySelectorAll(".msg").forEach(msg2 => msg2.removeEventListener("click", toggleSelected));
-                    }
-                }
+        if (localStorage.getItem("selected").trim().split(" ")[0] === "") {
+            dlen.parentElement.style.display = "none";
+            document.querySelectorAll(".msg").forEach(msg2 => msg2.removeEventListener("click", toggleSelected));
+        }
+    };
 
-        msg.addEventListener("pointerdown", () => {
-            let timeOut = setTimeout(() => {
-                msg.style.backgroundColor = "gray";
-                
-                dlen.parentElement.style.display = "flex";
-                
-		if (!localStorage.getItem("selected").includes(msg.id)) {
-	            localStorage.setItem("selected", localStorage.getItem("selected") + msg.id + " ");
-		}
-                
-                dlen.innerHTML = "Delete " + localStorage.getItem("selected").trim().split(" ").length + " Chat(s)";
+    msg.addEventListener("mousedown", () => {
+        let timeOut = setTimeout(() => {
+            msg.style.backgroundColor = "gray";
+            dlen.parentElement.style.display = "flex";
 
-                document.querySelectorAll(".msg").forEach(msg2 => msg2.addEventListener("click", toggleSelected));
-            }, 1000);
+            if (!localStorage.getItem("selected").includes(msg.id)) {
+                localStorage.setItem("selected", localStorage.getItem("selected") + msg.id + " ");
+            }
 
-            localStorage.setItem("timeOut", timeOut);
-        });
+            dlen.innerHTML = "Delete " + localStorage.getItem("selected").trim().split(" ").length + " Chat(s)";
 
-        msg.addEventListener("pointerup", () => {
-            clearTimeout(localStorage.getItem("timeOut"));
-        });
+            document.querySelectorAll(".msg").forEach(msg2 => msg2.addEventListener("click", toggleSelected));
+        }, 1000);
+
+        localStorage.setItem("timeOut", timeOut);
     });
+
+    msg.addEventListener("mouseup", () => {
+        clearTimeout(localStorage.getItem("timeOut"));
+    });
+
+    msg.addEventListener("click", () => {
+        toggleSelected();
+    });
+});
+
+// Add this to ensure the event listeners are initially set up
+document.querySelectorAll(".msg").forEach(msg => {
+    msg.addEventListener("click", () => {
+        toggleSelected();
+    });
+});
+
 
     openOptionsMenu();
 };
