@@ -135,7 +135,7 @@ window.onload = async () => {
     let prevBg = document.querySelectorAll(".msg")[0].style.backgroundColor;
 
     document.querySelectorAll(".msg").forEach(msg => {
-        const toggleSelected = () => {
+        const toggleSelected = (msg) => {
             msg.style.backgroundColor = prevBg;
 
             if (localStorage.getItem("selected").includes(msg.id)) {
@@ -152,7 +152,7 @@ window.onload = async () => {
 
             if (localStorage.getItem("selected").trim().split(" ")[0] === "") {
                 dlen.parentElement.style.display = "none";
-                document.querySelectorAll(".msg").forEach(msg2 => msg2.removeEventListener("click", toggleSelected));
+                document.querySelectorAll(".msg").forEach(msg2 => msg2.removeEventListener("click", () => toggleSelected(msg2)));
 
                 localStorage.setItem("selectionMode", false);
             }
@@ -179,7 +179,7 @@ window.onload = async () => {
             clearTimeout(localStorage.getItem("timeOut"));
 
             if (localStorage.getItem("selectionMode")) {
-                document.querySelectorAll(".msg").forEach(msg2 => msg2.addEventListener("click", toggleSelected));
+                document.querySelectorAll(".msg").forEach(msg2 => msg2.addEventListener("click", () => toggleSelected(msg2)));
             }
         });
     });
