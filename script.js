@@ -152,6 +152,8 @@ window.onload = async () => {
             console.log("unselected, selecting it", msg3, localStorage.getItem("selected"));
         }
 
+        msg3.removeEventListener("click", () => toggleSelected(msg3));
+
         dlen.innerHTML = "Delete " + localStorage.getItem("selected").trim().split(" ").length + " Chat(s)";
 
         if (localStorage.getItem("selected").trim() == "") {
@@ -162,9 +164,8 @@ window.onload = async () => {
             console.log("all cleared");
         }
     };
-    
-    document.querySelectorAll(".msg").forEach(msg => {
 
+    document.querySelectorAll(".msg").forEach(msg => {
         msg.addEventListener("mousedown", () => {
             let timeOut = setTimeout(() => {
                 msg.style.backgroundColor = "gray";
