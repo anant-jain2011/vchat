@@ -132,11 +132,8 @@ window.onload = async () => {
 
     localStorage.setItem("selected", "");
 
-    let prevBg = document.querySelectorAll(".msg")[0].style.backgroundColor;
-
     const toggleSelected = (msg3) => {
-        msg3.style.backgroundColor = "#25D366";
-        // msg3.style.backgroundColor = msg3.classList.includes("msg-left") ? "#fff" : "#25D366";
+        let prevBg = msg3.classList.value.includes("msg-left") ? "#fff" : "#25D366";
 
         if (localStorage.getItem("selected").includes(msg3.id)) {
             localStorage.setItem("selected", localStorage.getItem("selected").replaceAll(msg3.id + " ", ""));
@@ -156,7 +153,7 @@ window.onload = async () => {
 
         if (localStorage.getItem("selected").trim() == "") {
             dlen.parentElement.style.display = "none";
-            document.querySelectorAll(".msg").forEach(msg2 => msg2.removeEventListener("click", () => toggleSelected(msg2)));
+            document.querySelectorAll(".msg").forEach(msg2 => msg2.removeEventListener("click", toggleSelected));
 
             localStorage.setItem("selectionMode", false);
             console.log("all cleared");
@@ -185,9 +182,9 @@ window.onload = async () => {
             clearTimeout(localStorage.getItem("timeOut"));
 
             if (eval(localStorage.getItem("selectionMode"))) {
-                document.querySelectorAll(".msg").forEach(msg2 => msg2.removeEventListener("click", () => toggleSelected(msg2)));
+                document.querySelectorAll(".msg").forEach(msg2 => msg2.removeEventListener("click", toggleSelected));
 
-                document.querySelectorAll(".msg").forEach(msg2 => msg2.addEventListener("click", () => toggleSelected(msg2)));
+                document.querySelectorAll(".msg").forEach(msg2 => msg2.addEventListener("click", toggleSelected));
             }
         });
     });
