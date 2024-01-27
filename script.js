@@ -134,35 +134,36 @@ window.onload = async () => {
 
     let prevBg = document.querySelectorAll(".msg")[0].style.backgroundColor;
 
+    const toggleSelected = (msg3) => {
+        msg3.style.backgroundColor = "#25D366";
+        // msg3.style.backgroundColor = msg3.classList.includes("msg-left") ? "#fff" : "#25D366";
+
+        if (localStorage.getItem("selected").includes(msg3.id)) {
+            localStorage.setItem("selected", localStorage.getItem("selected").replaceAll(msg3.id + " ", ""));
+            msg3.style.backgroundColor = prevBg;
+
+            console.log("already selected, deselecting it", msg3, localStorage.getItem("selected"));
+        }
+        
+        else {
+            localStorage.setItem("selected", localStorage.getItem("selected") + msg3.id + " ");
+            msg3.style.backgroundColor = "gray";
+
+            console.log("unselected, selecting it", msg3, localStorage.getItem("selected"));
+        }
+
+        dlen.innerHTML = "Delete " + localStorage.getItem("selected").trim().split(" ").length + " Chat(s)";
+
+        if (localStorage.getItem("selected").trim() == "") {
+            dlen.parentElement.style.display = "none";
+            document.querySelectorAll(".msg").forEach(msg2 => msg2.removeEventListener("click", () => toggleSelected(msg2)));
+
+            localStorage.setItem("selectionMode", false);
+            console.log("all cleared");
+        }
+    };
+    
     document.querySelectorAll(".msg").forEach(msg => {
-        const toggleSelected = (msg3) => {
-            msg3.style.backgroundColor = "#25D366";
-            // msg3.style.backgroundColor = msg3.classList.includes("msg-left") ? "#fff" : "#25D366";
-
-            if (localStorage.getItem("selected").includes(msg3.id)) {
-                localStorage.setItem("selected", localStorage.getItem("selected").replaceAll(msg3.id + " ", ""));
-                msg3.style.backgroundColor = prevBg;
-
-                console.log("already selected, deselecting it", msg3, localStorage.getItem("selected"));
-            }
-            
-            else {
-                localStorage.setItem("selected", localStorage.getItem("selected") + msg3.id + " ");
-                msg3.style.backgroundColor = "gray";
-
-                console.log("unselected, selecting it", msg3, localStorage.getItem("selected"));
-            }
-
-            dlen.innerHTML = "Delete " + localStorage.getItem("selected").trim().split(" ").length + " Chat(s)";
-
-            if (localStorage.getItem("selected").trim() == "") {
-                dlen.parentElement.style.display = "none";
-                document.querySelectorAll(".msg").forEach(msg2 => msg2.removeEventListener("click", () => toggleSelected(msg2)));
-
-                localStorage.setItem("selectionMode", false);
-                console.log("all cleared");
-            }
-        };
 
         msg.addEventListener("mousedown", () => {
             let timeOut = setTimeout(() => {
