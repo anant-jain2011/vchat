@@ -136,7 +136,8 @@ window.onload = async () => {
 
     document.querySelectorAll(".msg").forEach(msg => {
         const toggleSelected = (msg3) => {
-            msg3.style.backgroundColor = msg3.classList.includes("msg-left") ? "#fff" : "#25D366";
+            msg3.style.backgroundColor = "#25D366";
+            // msg3.style.backgroundColor = msg3.classList.includes("msg-left") ? "#fff" : "#25D366";
 
             if (localStorage.getItem("selected").includes(msg3.id)) {
                 localStorage.setItem("selected", localStorage.getItem("selected").replaceAll(msg3.id + " ", ""));
