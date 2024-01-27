@@ -178,7 +178,7 @@ window.onload = async () => {
         msg.addEventListener("mouseup", () => {
             clearTimeout(localStorage.getItem("timeOut"));
 
-            if (localStorage.getItem("selectionMode")) {
+            if (eval(localStorage.getItem("selectionMode"))) {
                 document.querySelectorAll(".msg").forEach(msg2 => msg2.addEventListener("click", () => toggleSelected(msg2)));
             }
         });
