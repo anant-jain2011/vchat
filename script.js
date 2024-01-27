@@ -152,8 +152,6 @@ window.onload = async () => {
             console.log("unselected, selecting it", msg3, localStorage.getItem("selected"));
         }
 
-        msg3.removeEventListener("click", () => toggleSelected(msg3));
-
         dlen.innerHTML = "Delete " + localStorage.getItem("selected").trim().split(" ").length + " Chat(s)";
 
         if (localStorage.getItem("selected").trim() == "") {
@@ -187,6 +185,8 @@ window.onload = async () => {
             clearTimeout(localStorage.getItem("timeOut"));
 
             if (eval(localStorage.getItem("selectionMode"))) {
+                document.querySelectorAll(".msg").forEach(msg2 => msg2.removeEventListener("click", () => toggleSelected(msg2)));
+
                 document.querySelectorAll(".msg").forEach(msg2 => msg2.addEventListener("click", () => toggleSelected(msg2)));
             }
         });
