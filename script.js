@@ -153,7 +153,7 @@ window.onload = async () => {
 
         if (localStorage.getItem("selected").trim() == "") {
             dlen.parentElement.style.display = "none";
-            document.querySelectorAll(".msg").forEach(msg2 => msg2.removeEventListener("click", toggleSelected));
+            document.querySelectorAll(".msg").forEach(msg2 => msg2.onclick = () => null);
 
             localStorage.setItem("selectionMode", false);
             console.log("all cleared");
@@ -182,9 +182,9 @@ window.onload = async () => {
             clearTimeout(localStorage.getItem("timeOut"));
 
             if (eval(localStorage.getItem("selectionMode"))) {
-                document.querySelectorAll(".msg").forEach(msg2 => msg2.removeEventListener("click", toggleSelected));
+                document.querySelectorAll(".msg").forEach(msg2 => msg2.onclick = () => null);
 
-                document.querySelectorAll(".msg").forEach(msg2 => msg2.addEventListener("click", toggleSelected));
+                document.querySelectorAll(".msg").forEach(msg2 => msg2.onclick = toggleSelected);
             }
         });
     });
