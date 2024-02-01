@@ -132,7 +132,8 @@ window.onload = async () => {
 
     localStorage.setItem("selected", "");
 
-    const toggleSelected = (msg3) => {
+    const toggleSelected = (e) => {
+        let msg3 = e.target;
         let prevBg = msg3.classList.value.includes("msg-left") ? "#fff" : "#25D366";
 
         if (localStorage.getItem("selected").includes(msg3.id)) {
@@ -182,8 +183,6 @@ window.onload = async () => {
             clearTimeout(localStorage.getItem("timeOut"));
 
             if (eval(localStorage.getItem("selectionMode"))) {
-                document.querySelectorAll(".msg").forEach(msg2 => msg2.onclick = () => null);
-
                 document.querySelectorAll(".msg").forEach(msg2 => msg2.onclick = toggleSelected);
             }
         });
