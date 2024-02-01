@@ -134,6 +134,10 @@ window.onload = async () => {
 
     const toggleSelected = (e) => {
         let msg3 = e.target;
+        if (!msg3.classList.value.includes("msg")) {
+            msg3 = msg3.parentElement;
+        }
+        
         let prevBg = msg3.classList.value.includes("msg-left") ? "#fff" : "#25D366";
 
         if (localStorage.getItem("selected").includes(msg3.id)) {
