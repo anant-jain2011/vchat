@@ -85,36 +85,51 @@ const deleteSelected = async () => {
 };
 
 window.onload = async () => {
-    if (!localStorage.getItem("username")) {
-        const userName = prompt("What is your Name?");
+    if (localStorage.getItem("username") == null && location.search != "") {
+        const userName = location.search.replace("?", "").split("&")[0].replace("un=", "");
         localStorage.setItem("username", userName);
 
-        let roomNumber = Math.floor(Date.now() / 1000) * parseInt(Math.random() * 10);
+        const roomNumber = location.search.replace("?", "").split("&")[1].replace("room=", "");
+        localStorage.setItem("roomNumber", roomNumber);
 
-        alert("Welcome to India's No.1 Chatting App. Your Room number is", roomNumber);
+        const roomName = decodeURI(location.search.replace("?", "").split("&")[2].replace("roomName=", ""));
+        roomname.textContent = roomName;
+        localStorage.setItem("roomName", roomName);
 
-        (async function () {
-            try {
-                const res = await fetch(baseUrl + "/username", {
-                    method: "POST",
-                    mode: "no-cors",
-                    headers: {
-                        "Content-Type": "application/x-www-form-urlencoded",
-                    },
-                    body: JSON.stringify({ userName }),
-                });
-            } catch (error) { }
-        })();
+        location.search = "";
+
+        // alert("Welcome to India's No.1 Chatting App. Your Room number is " + roomNumber);
+
+        // (async function () {
+        //     try {
+        //         const res = await fetch(baseUrl + "/username", {
+        //             method: "POST",
+        //             mode: "no-cors",
+        //             headers: {
+        //                 "Content-Type": "application/x-www-form-urlencoded",
+        //             },
+        //             body: JSON.stringify({ userName }),
+        //         });
+        //     } catch (error) { }
+        // })();
+    }
+
+    if (localStorage.getItem("username") == null) {
+        location.href = "/join/";
+    }
+    
+    if (localStorage.getItem("username") != null) {
+        roomname.textContent = localStorage.getItem("roomName");
     }
 
     msg.focus();
 
     await getChats().then((messages) => {
         messages.map((message) => {
-            if (message.sentFrom == localStorage.getItem("username")) {
-                displayMessage(decodeMessage(message.content, message.createdAt), "right", message._id);
-            } else {
+            if (message.sentFrom != localStorage.getItem("username") && message.roomNumber == localStorage.getItem("roomNumber")) {
                 displayMessage(`<b>${message.sentFrom}:</b> ${decodeMessage(message.content, message.createdAt)}`, "left", message._id);
+            } else {
+                displayMessage(decodeMessage(message.content, message.createdAt), "right", message._id);
             }
             msgBox.parentElement.scrollTop = msgBox.parentElement.scrollHeight;
         });
@@ -123,7 +138,7 @@ window.onload = async () => {
     eventSource.addEventListener("message", (event) => {
         let item = (typeof event.data) == "string" ? JSON.parse(event.data).newMessage : event.data.newMessage;
 
-        if (item.sentFrom != localStorage.getItem("username")) {
+        if (item.sentFrom != localStorage.getItem("username") && item.roomNumber == localStorage.getItem("roomNumber")) {
             displayMessage(`<b>${message.sentFrom}:</b> ${decodeMessage(message.content, message.createdAt)}`, "left", message._id);
         }
 
@@ -137,7 +152,7 @@ window.onload = async () => {
         if (!msg3.classList.value.includes("msg")) {
             msg3 = msg3.parentElement;
         }
-        
+
         let prevBg = msg3.classList.value.includes("msg-left") ? "#fff" : "#25D366";
 
         if (localStorage.getItem("selected").includes(msg3.id)) {
@@ -146,7 +161,7 @@ window.onload = async () => {
 
             console.log("already selected, deselecting it", msg3, localStorage.getItem("selected"));
         }
-        
+
         else {
             localStorage.setItem("selected", localStorage.getItem("selected") + msg3.id + " ");
             msg3.style.backgroundColor = "gray";
@@ -211,8 +226,8 @@ const sendMessage = () => {
                 },
                 body: JSON.stringify({
                     userName: localStorage.getItem("username"),
-                    content: msg.value,
-                    // roomNumber: localStorage.getItem("roomNumber")
+                    roomNumber: localStorage.getItem("roomNumber"),
+                    content: msg.value
                 }),
             });
         })();
@@ -238,3 +253,10 @@ const clearChats = () => {
         msgBox.innerHTML = "";
     }
 };
+
+function leaveRoom () {
+    localStorage.removeItem("username");
+    localStorage.removeItem("roomNumber");
+    localStorage.removeItem("roomName");
+    location.href = "/join/";
+}

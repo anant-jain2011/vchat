@@ -4,18 +4,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rough Work</title>
-    <style>
-        
-    </style>
+    <title>Join Chat Room</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <div class="triangle" id="tria">
-        <div class="cover" id="cov"></div>
+    <div class="join-container">
+        <h1>Join a Chat Room</h1>
+        <form onsubmit="changeDetails()">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="roomS">Chat Room:</label>
+            <select id="roomS" name="roomS" required>
+                <option value="">Please select a room</option>
+                <option value="room1">Room 1</option>
+                <option value="room2">Room 2</option>
+                <option value="room3">Room 3</option>
+            </select>
+
+            <button type="submit" id="joinBtn">Join</button>
+        </form>
     </div>
 
     <script>
+
+        const baseUrl = "https://vchat-4ldl.onrender.com";
+
+        fetch(baseUrl + '/rooms')
+            .then(response => response.json())
+            .then(data => {
+                const roomSelect = document.getElementById('roomS');
+                data.forEach(room => {
+                    const option = document.createElement('option');
+                    option.value = room.roomNumber;
+                    option.textContent = room.roomName;
+                    roomSelect.appendChild(option);
+                });
+            });
+
+        function changeDetails() {
+            event.preventDefault();
+
+            const username = document.getElementById('username').value;
+            const room = document.getElementById('roomS');
+            const url = `${location.origin}/index.html?un=${username}&room=${room.value}&roomName=${room.selectedOptions[0].textContent}`;
+            location.href = url;
+
+            console.log(url);
+        };
     </script>
 </body>
 
