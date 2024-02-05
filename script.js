@@ -128,7 +128,9 @@ window.onload = async () => {
         messages.map((message) => {
             if (message.sentFrom != localStorage.getItem("username") && message.roomNumber == localStorage.getItem("roomNumber")) {
                 displayMessage(`<b>${message.sentFrom}:</b> ${decodeMessage(message.content, message.createdAt)}`, "left", message._id);
-            } else {
+            } 
+            
+            if (message.sentFrom == localStorage.getItem("username") && message.roomNumber == localStorage.getItem("roomNumber")) {
                 displayMessage(decodeMessage(message.content, message.createdAt), "right", message._id);
             }
             msgBox.parentElement.scrollTop = msgBox.parentElement.scrollHeight;
