@@ -9,11 +9,50 @@ body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-color: #f0f0f0;
+    background-color: #ecececb4;
+}
+
+.choice {
+    position: absolute;
+    top: 5%;
+    width: 20%;
+    height: 60px;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    border-radius: 12px;
+}
+
+.opt {
+    width: 30%;
+    height: 65%;
+    background-color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    box-shadow: 0px -1px 1px 1px rgb(210, 210, 210);
+    border-radius: 10px;
+    border: none;
+    letter-spacing: 1px;
+    font-size: 16px;
+    font-family: 'Poppins', sans-serif;
+}
+
+.bar {
+    position: absolute;
+    width: 25%;
+    /* display: block; */
+    height: 2px;
+    background-color: #007BFF;
+    bottom: 17.5%;
+    left: 12.5%;
+    border-radius: 10%;
+    transition: all 200ms ease;
 }
 
 .join-container {
-    width: 300px;
+    width: 280px;
     padding: 20px;
     background-color: #fff;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
@@ -46,11 +85,8 @@ body {
     border-radius: 5px;
     font-size: 16px;
     padding-right: 10px;
-    /* letter-spacing: 1px; */
     transition: border-color 0.3s;
 }
-
-/* .join */
 
 .join-container button {
     padding: 10px;
@@ -67,4 +103,10 @@ body {
 
 .join-container button:hover {
     background-color: #0056b3;
+}
+
+@media screen and (max-width: 425px) {
+    .choice {
+        width: 70%;
+    }
 }

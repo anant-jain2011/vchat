@@ -9,8 +9,27 @@
 </head>
 
 <body>
-    <div class="join-container">
+    <div class="choice">
+        <button class="opt" id="opt">Join</button>
+        <button class="opt" id="opt2">Create</button>
+        <div class="bar" id="bar"></div>
+    </div>
+
+    <div class="join-container" id="joinCtr">
         <h1>Join a Chat Room</h1>
+        <form onsubmit="changeDetails()">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+
+            <label for="roomS">Chat Room Id:</label>
+            <input type="text" id="roomId">
+
+            <button type="submit" id="joinBtn">Join</button>
+        </form>
+    </div>
+
+    <div class="create-container" id="createCtr" hidden>
+        <h1>Create your own Room</h1>
         <form onsubmit="changeDetails()">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>
@@ -27,33 +46,7 @@
         </form>
     </div>
 
-    <script>
-
-        const baseUrl = "https://vchat-4ldl.onrender.com";
-
-        fetch(baseUrl + '/rooms')
-            .then(response => response.json())
-            .then(data => {
-                const roomSelect = document.getElementById('roomS');
-                data.forEach(room => {
-                    const option = document.createElement('option');
-                    option.value = room.roomNumber;
-                    option.textContent = room.roomName;
-                    roomSelect.appendChild(option);
-                });
-            });
-
-        function changeDetails() {
-            event.preventDefault();
-
-            const username = document.getElementById('username').value;
-            const room = document.getElementById('roomS');
-            const url = `${location.origin}/index.html?un=${username}&room=${room.value}&roomName=${room.selectedOptions[0].textContent}`;
-            location.href = url;
-
-            console.log(url);
-        };
-    </script>
+    <script src="script.js"></script>
 </body>
 
 </html>

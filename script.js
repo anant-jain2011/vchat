@@ -85,66 +85,55 @@ const deleteSelected = async () => {
 };
 
 window.onload = async () => {
-    if (localStorage.getItem("username") == null && location.search != "") {
-        const userName = location.search.replace("?", "").split("&")[0].replace("un=", "");
-        localStorage.setItem("username", userName);
-
-        const roomNumber = location.search.replace("?", "").split("&")[1].replace("room=", "");
-        localStorage.setItem("roomNumber", roomNumber);
-
-        const roomName = decodeURI(location.search.replace("?", "").split("&")[2].replace("roomName=", ""));
-        roomname.textContent = roomName;
-        localStorage.setItem("roomName", roomName);
-
-        location.search = "";
-
-        // alert("Welcome to India's No.1 Chatting App. Your Room number is " + roomNumber);
-
-        // (async function () {
-        //     try {
-        //         const res = await fetch(baseUrl + "/username", {
-        //             method: "POST",
-        //             mode: "no-cors",
-        //             headers: {
-        //                 "Content-Type": "application/x-www-form-urlencoded",
-        //             },
-        //             body: JSON.stringify({ userName }),
-        //         });
-        //     } catch (error) { }
-        // })();
-    }
-
-    if (localStorage.getItem("username") == null) {
+    if (localStorage.getItem("details") == null) {
         location.href = "/join/";
     }
-    
-    if (localStorage.getItem("username") != null) {
-        roomname.textContent = localStorage.getItem("roomName");
+
+    let details = JSON.parse(localStorage.getItem("details"));
+
+    let { username, roomNumber } = details;
+
+    if (details.roomName) {
+        roomname.innerHTML = details.roomName;
+    } else {
+        (async function () {
+            const res = await fetch(baseUrl + "/room?rn=" + roomNumber);
+
+            let resp = await res.json();
+
+            roomname.innerHTML = resp.noomName;
+            details.roomName = resp.noomName;
+
+            localStorage.setItem("details", JSON.stringify(details));
+        })();
     }
 
     msg.focus();
 
     await getChats().then((messages) => {
         messages.map((message) => {
-            if (message.sentFrom != localStorage.getItem("username") && message.roomNumber == localStorage.getItem("roomNumber")) {
-                displayMessage(`<b>${message.sentFrom}:</b> ${decodeMessage(message.content, message.createdAt)}`, "left", message._id);
-            } 
-            
-            if (message.sentFrom == localStorage.getItem("username") && message.roomNumber == localStorage.getItem("roomNumber")) {
-                displayMessage(decodeMessage(message.content, message.createdAt), "right", message._id);
+            if (message.roomNumber == roomNumber) {
+                if (message.sentFrom != username) {
+                    displayMessage(`<b>${message.sentFrom}:</b> ${decodeMessage(message.content, message.createdAt)}`, "left", message._id);
+                }
+
+                else {
+                    displayMessage(decodeMessage(message.content, message.createdAt), "right", message._id);
+                }
+
+                msgBox.parentElement.scrollTop = msgBox.parentElement.scrollHeight;
             }
-            msgBox.parentElement.scrollTop = msgBox.parentElement.scrollHeight;
         });
     });
 
     eventSource.addEventListener("message", (event) => {
         let item = (typeof event.data) == "string" ? JSON.parse(event.data).newMessage : event.data.newMessage;
 
-        if (item.sentFrom != localStorage.getItem("username") && item.roomNumber == localStorage.getItem("roomNumber")) {
+        if (item.sentFrom != username && item.roomNumber == roomNumber) {
             displayMessage(`<b>${message.sentFrom}:</b> ${decodeMessage(message.content, message.createdAt)}`, "left", message._id);
-        }
 
-        msgBox.parentElement.scrollTop = msgBox.parentElement.scrollHeight;
+            msgBox.parentElement.scrollTop = msgBox.parentElement.scrollHeight;
+        }
     });
 
     localStorage.setItem("selected", "");
@@ -220,6 +209,10 @@ const sendMessage = () => {
         displayMessage(msg.value, "right");
         msgBox.parentElement.scrollTop = msgBox.parentElement.scrollHeight;
 
+        let details = JSON.parse(localStorage.getItem("details"));
+
+        let { username, roomNumber } = details;
+
         (async function () {
             const res = await fetch(baseUrl + "/chat", {
                 method: "POST",
@@ -227,8 +220,8 @@ const sendMessage = () => {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    userName: localStorage.getItem("username"),
-                    roomNumber: localStorage.getItem("roomNumber"),
+                    userName: username,
+                    roomNumber: roomNumber,
                     content: msg.value
                 }),
             });
@@ -256,9 +249,8 @@ const clearChats = () => {
     }
 };
 
-function leaveRoom () {
-    localStorage.removeItem("username");
-    localStorage.removeItem("roomNumber");
-    localStorage.removeItem("roomName");
+function leaveRoom() {
+    localStorage.removeItem("details");
+
     location.href = "/join/";
 }
