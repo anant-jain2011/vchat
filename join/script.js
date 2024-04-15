@@ -12,9 +12,9 @@ function changeDetails() {
         let resp = await res.json();
 
         localStorage.setItem("details", JSON.stringify({ username, roomNumber, roomName: resp[0].roomName }));
-    })();
 
-    location.href = `${location.origin}/index.html`;
+        location.href = `${location.origin}/index.html`;
+    })();
 };
 
 const select = (n) => {
