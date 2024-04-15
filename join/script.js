@@ -8,7 +8,7 @@ function changeDetails() {
 
     localStorage.setItem("details", JSON.stringify({username, roomNumber}));
 
-    location.href = `${location.origin}/static/index.html`;
+    location.href = `${location.origin}/index.html`;
 
     console.log(url);
 };
