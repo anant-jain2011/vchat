@@ -101,8 +101,8 @@ window.onload = async () => {
 
             let resp = await res.json();
 
-            roomname.innerHTML = resp.noomName;
-            details.roomName = resp.noomName;
+            roomname.innerHTML = resp[0].roomName;
+            details.roomName = resp[0].roomName;
 
             localStorage.setItem("details", JSON.stringify(details));
         })();
