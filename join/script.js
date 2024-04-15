@@ -6,22 +6,26 @@ function changeDetails() {
     const username = document.getElementById('username').value;
     const roomNumber = document.getElementById('roomId').value;
 
-    localStorage.setItem("details", JSON.stringify({username, roomNumber}));
+    (async function () {
+        const res = await fetch(baseUrl + "/room?rn=" + roomNumber);
+
+        let resp = await res.json();
+
+        localStorage.setItem("details", JSON.stringify({ username, roomNumber, roomName: resp[0].roomName }));
+    })();
 
     location.href = `${location.origin}/index.html`;
-
-    console.log(url);
 };
 
 const select = (n) => {
     n == 1 ? (() => {
         bar.style.left = "12.5%";
-        joinCtr.hidden = !joinCtr.hidden;
-        createCtr.hidden = !createCtr.hidden;
+        joinCtr.hidden = false;
+        createCtr.hidden = true;
     })() : (() => {
         bar.style.left = "62.5%";
-        joinCtr.hidden = !joinCtr.hidden;
-        createCtr.hidden = !createCtr.hidden;
+        joinCtr.hidden = true;
+        createCtr.hidden = false;
     })();
 };
 
@@ -29,8 +33,11 @@ opt.addEventListener("click", (e) => select(1));
 opt2.addEventListener("click", (e) => select(2));
 
 const createRoom = () => {
+    event.preventDefault();
+
+    let username = document.getElementById('username').value;
+    let roomName = document.getElementById('roomName').value;
     let newRoomId = Math.floor(100000 + Math.random() * 900000);
-    let roomName = document.getElementById("roomName").value;
     let maxMembers = document.getElementById("maxMembers").value;
 
     let data = {
@@ -49,6 +56,10 @@ const createRoom = () => {
             body: JSON.stringify(data),
         });
 
+        let resp = res.json();
 
+        location.href = `${location.origin}/index.html?newRoom`;
     })();
+
+    localStorage.setItem("details", JSON.stringify({ username, ...data }));
 }

@@ -15,31 +15,32 @@
         <div class="bar" id="bar"></div>
     </div>
 
-    <div class="join-container" id="joinCtr">
+    <div class="container" id="joinCtr">
         <h1>Join a Chat Room</h1>
         <form onsubmit="changeDetails()">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>
 
-            <label for="roomS">Chat Room Id:</label>
-            <input type="text" id="roomId">
+            <label for="roomId">Chat Room Id:</label>
+            <input type="text" id="roomId" required>
 
-            <button type="submit" id="joinBtn">Join</button>
+            <button type="submit" class="sub-btn">Join</button>
         </form>
     </div>
 
-    <div class="create-container" id="createCtr" hidden>
-        <h1>Create your own Room</h1>
-        <form onsubmit="changeDetails()">
+    <div class="container" id="createCtr" hidden>
+        <h1>Create your own Chat Room</h1>
+        <form onsubmit="createRoom()">
             <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
+            <input type="text" id="username2" name="username" required>
 
-            <label for="roomS">Chat Room:</label>
-            <select id="roomS" name="roomS" required>
-                <option value="">Please select a room</option>
-            </select>
+            <label for="roomName">Chat Room Name:</label>
+            <input id="roomName" name="roomName" required>
 
-            <button type="submit" id="joinBtn">Join</button>
+            <label for="maxMembers">Max Members: (optional)</label>
+            <input type="number" id="maxMembers" name="maxMembers">
+
+            <button type="submit" class="sub-btn">Create</button>
         </form>
     </div>
 

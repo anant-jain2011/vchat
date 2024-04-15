@@ -91,22 +91,9 @@ window.onload = async () => {
 
     let details = JSON.parse(localStorage.getItem("details"));
 
-    let { username, roomNumber } = details;
+    let { username, roomNumber, roomName } = details;
 
-    if (details.roomName) {
-        roomname.innerHTML = details.roomName;
-    } else {
-        (async function () {
-            const res = await fetch(baseUrl + "/room?rn=" + roomNumber);
-
-            let resp = await res.json();
-
-            roomname.innerHTML = resp[0].roomName;
-            details.roomName = resp[0].roomName;
-
-            localStorage.setItem("details", JSON.stringify(details));
-        })();
-    }
+    roomname.innerHTML = roomName;    
 
     msg.focus();
 
