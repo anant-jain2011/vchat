@@ -1,8 +1,8 @@
-# 🚀 vchat – Real-Time Web Chat Application
+# 🚀 V-Chat – Real-Time Web Chat Application
 
 [Live Demo](https://vchats.vercel.app)
 
-**vchat** is a lightweight, real-time chat application built using HTML, CSS, and JavaScript. It enables seamless communication between users through a clean and responsive interface.
+**V-Chat** is a lightweight, real-time chat application built using HTML, CSS, and JavaScript. It enables seamless communication between users through a clean and responsive interface.
 
 ---
 
@@ -90,6 +90,7 @@ This project is licensed under the [MIT License](LICENSE).
 For feedback or inquiries:
 
 - GitHub: [@anant-jain2011](https://github.com/anant-jain2011)
+- Email: [jutsucodes@gmail.com](jutsucodes@gmail.com)
 
 ---
 
