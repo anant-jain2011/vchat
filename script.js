@@ -93,7 +93,8 @@ window.onload = async () => {
 
     let { username, roomNumber, roomName } = details;
 
-    roomname.innerHTML = roomName;    
+    roomname.innerHTML = roomName;
+    roomnumber.innerHTML = "Room Id - " + roomNumber;
 
     msg.focus();
 
