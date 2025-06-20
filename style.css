@@ -175,6 +175,7 @@ li::selection {
 .messages {
     height: 100%;
     width: 100%;
+    padding-right: 3px;
 }
 
 .msg {
