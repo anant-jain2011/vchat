@@ -6,7 +6,7 @@
 }
 
 body {
-    background-image: radial-gradient(#25D366, #fff);
+    background-image: radial-gradient(blueviolet, #fff, blueviolet);
     height: 100vh;
     overflow: hidden;
     width: 100vw;
