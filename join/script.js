@@ -48,6 +48,7 @@ const createRoom = () => {
     maxMembers ? data.maxMembers = maxMembers : false;
 
     (async function () {
+        try {
         const res = await fetch(baseUrl + "/addRoom", {
             method: "POST",
             headers: {
@@ -59,6 +60,10 @@ const createRoom = () => {
         let resp = res.json();
 
         location.href = `${location.origin}/index.html?newRoom`;
+        }
+        catch(err) {
+            alert(err);
+        }
     })();
 
     localStorage.setItem("details", JSON.stringify({ username, ...data }));
