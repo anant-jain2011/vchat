@@ -37,6 +37,12 @@ body {
     align-items: center;
 }
 
+.n-bar {
+    display:flex;
+	flex-direction:column;
+	gap:4px;
+}
+
 /* .arrow {
     height: 35px;
     width: 35px;
