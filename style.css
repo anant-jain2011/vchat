@@ -41,6 +41,8 @@ body {
     display:flex;
 	flex-direction:column;
 	gap:4px;
+	justify-content:center;
+    margin-left: 20px;
 }
 
 /* .arrow {
@@ -52,9 +54,12 @@ body {
 
 .name {
     font-weight: bold;
-    margin-left: 20px;
     font-size: x-large;
     margin-right: 20px;
+}
+
+.rno {
+	font-size:large;
 }
 
 .c-bar {
